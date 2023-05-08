@@ -1,0 +1,17 @@
+:root {
+  --vp-c-text-light-1: rgba(60, 60, 67, .92);
+  --vp-c-text-light-2: rgba(60, 60, 67, .7);
+
+  --vp-c-text-1: var(--vp-c-text-light-1);
+  --vp-c-text-2: var(--vp-c-text-light-2);
+}
+
+html.dark {
+  --vp-c-text-light-1: rgba(255, 255, 245, .86);
+  --vp-c-text-light-2: rgba(235, 235, 245, .6);
+}
+
+.slidev-layout.two-columns .grid {
+  gap: 1rem;
+}
+
