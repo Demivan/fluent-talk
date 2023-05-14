@@ -37,7 +37,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
   .demo {
     padding: 1rem;
     margin-top: 1rem;
@@ -51,7 +51,6 @@
   }
 
   label {
-    color: #c6c6c6;
     font-size: 16px;
     font-weight: normal;
     position: absolute;
@@ -61,14 +60,13 @@
 
   input, select {
     background: none;
-    color: var(--vp-c-text-1);
     font-size: 18px;
-    padding: 10px 10px 10px 5px;
+    padding: 5px;
     display: block;
     width: 100%;
     border: none;
     border-radius: 0;
-    border-bottom: 1px solid var(--vp-c-text-2);
+    border-bottom: 1px solid var(--lt-color-border-dark);
   }
   
   input:focus {
@@ -78,6 +76,5 @@
   input ~ label, select ~ label {
     top: -14px;
     font-size: 12px;
-    color: var(--vp-c-text-2);
   }
 </style>
