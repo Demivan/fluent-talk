@@ -1,6 +1,6 @@
 ---
 highlighter: shiki
-editor: true
+editor: 'dev'
 ---
 
 # Fluent
@@ -8,58 +8,26 @@ editor: true
 ## localization system for natural-sounding translations
 
 ---
-layout: statement
----
 
 ## What is the difference between localization and internationalization?
 
----
+### What is Localization? (l10n)
 
-## What is Localization? (l10n)
+Localization is the process of adapting a product or service to meet the language, cultural, and other specific requirements of a particular country or region.
 
-### Definition
+Localization includes translation of content, but also includes adjustments to date and time formats, currency, images, and other factors that impact how the product or service is perceived and used.
 
-* Localization is the process of adapting a product or service to meet the language, cultural, and other specific requirements of a particular country or region.
-* Localization includes translation of content, but also includes adjustments to date and time formats, currency, images, and other factors that impact how the product or service is perceived and used.
+### What is Internationalization? (i18n)
 
-### Examples
+Internationalization is the process of designing and developing a product or service to be easily adapted for different languages, cultures, and regions.
 
-* Translating a website into multiple languages to appeal to global audiences.
-* Changing the date and time format on a software application to match local conventions.
-* Adapting product packaging to meet local regulations and cultural norms.
-
-### Benefits
-
-* Better user experience for local customers.
-* Improved customer satisfaction and loyalty.
-* Legal compliance with local regulations.
-
----
-
-## What is Internationalization? (i18n)
-
-### Definition
-
-* Internationalization is the process of designing and developing a product or service to be easily adapted for different languages, cultures, and regions.
-* Internationalization involves making the product or service flexible enough to accommodate local differences in content, without requiring significant changes to the core product or service.
-
-### Examples
-
-* Designing software to support multiple character sets, such as Latin, Cyrillic, or Arabic.
-* Using a content management system to easily update and manage multilingual content on a website.
-* Separating content and presentation to make it easier to localize content for different markets.
-
-### Benefits
-
-* Increased efficiency and cost savings in the localization process.
-* Faster time to market in new regions.
-* Reduced risk of cultural missteps or errors in translation.
+Internationalization involves making the product or service flexible enough to accommodate local differences in content, without requiring significant changes to the core product or service.
 
 ---
 
 ## Issues with current localization paradigm
 
-Software localization has been dominated by an outdated paradigm: the translation is just a dictionary of strings which map one-to-one to the English (en-US) copy.
+Software localization has been dominated by an outdated paradigm: the translation is just a dictionary of strings which map one-to-one to the English copy.
 
 ```json
 {
@@ -85,7 +53,7 @@ i18next.t('key', {count: 100}); // -> "100 items"
 
 ---
 
-## What is Fluent
+## What is Fluent?
 
 * Fluent is a localization system designed for creating natural-sounding translations.
 * Developed by Mozilla, the system uses a simpler syntax than traditional localization systems.

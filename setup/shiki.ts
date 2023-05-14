@@ -63,8 +63,8 @@ export default defineShikiSetup(() => {
       }
     ],  
     theme: {
-      dark: 'min-dark',
-      light: 'min-light',
+      dark: 'dark-plus',
+      light: 'light-plus',
     },
   }
 })
