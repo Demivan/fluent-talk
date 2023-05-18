@@ -227,3 +227,41 @@ tabs-close-warning = {$tabCount ->
              Ви хочете продовжити?
 }
 ```
+
+---
+
+## Date, time and number formatting
+
+
+
+---
+
+## Comparison with ICU MessageFormat
+
+ICU MessageFormat is the closest localization system to Fluent in terms of functionality.
+Fluent shares a lot of philosophy that drove the design of MessageFormat, but improves on it.
+
+```
+hello-user = Hello, {userName}!
+
+shared-photos = {userName} {photoCount, plural,
+    =1 {added a new photo}
+    other {added {photoCount} new photos}
+} to {userGender, select,
+    male {his stream}
+    female {her stream}
+    other {their stream}
+}.
+```
+
+Features that Fluent adds compared to MessageFormat: comments, BiDi support, message refences.
+
+Fluent has formatters that work out of the box, or you can extend them easily. MessageFormat provides formatters that must be applied by the developer. 
+
+Additionally, Fluent allows translators to override formatting arguments when appropriate (e.g. translator can decide to show currency symbol or code).
+
+---
+
+## Pontoon
+
+<img src="/pontoon.png" class="h-full p-4 m-auto rounded shadow" />
