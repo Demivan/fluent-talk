@@ -35,9 +35,9 @@ Internationalization involves making the product or service flexible enough to a
 <!--
 Локалізація - це процес адаптації продукту або сервісу для відповідності мовним, культурним та іншим специфічним вимогам певної країни або регіону.
 
-Це означає не тільки переклад контенту, але і адаптацію формату дати та часу, валюти, зображень та інших факторів, які впливають на сприйняття та використання продукту або сервісу.
+Це означає не тільки переклад контенту, але і адаптацію формату дати та часу, валюти, зображень та іншого, що впливає на сприйняття та використання продукту або сервісу.
 
-Інтернаціоналізація - це процес проектування та розробки продукту або сервісу, який легко локалізується для різних мов, культур та регіонів.
+Інтернаціоналізація - це процес проектування та розробки продукту або сервісу, який легко локалізується.
 
 Дуже часто розробники ігнорують інтернаціоналізацію, або роблять її пізно, коли вже відбулася локалізація. І це призводить до того, що локалізація стає дуже складною, або навіть неможливою.
 -->
@@ -68,9 +68,11 @@ $t("apples-and-bananas", {
 ```
 
 <!--
-Багато систем локалізації роблять інтернаціоналізацію складнішо. Вони ігнорують складність граматики більшості мов, і просто перекладають слова та речення з англійської мови. Це призводить до того, що розробникам доводиться додавати додатковий код для кожної мови, що використовується в проекті.
+Та й багато систем локалізації роблять інтернаціоналізацію складнішо. Вони ігнорують складність граматики більшості мов, і просто перекладають слова та речення з англійської мови. Це призводить до того, що розробникам доводиться додавати додатковий код для кожної мови, що використовується в проекті.
 
-Наприклад більшість систем локалізаці не підтримуть плюралізацію декількох змінних. І це призводить до того, що потрібно розбивати переклад на декілька стрічок і потім їх комбінувати.
+Наприклад більшість систем локалізаці не підтримуть плюралізацію декількох змінних, що призводить до того, що потрібно розбивати переклад на декілька стрічок і потім їх комбінувати.
+
+Тут наведений приклад з `vue-i18n`. Як бачимо синтаксис заставляє розбивати просте речення на три переклади. Додатково розробнику необхідно викорисовувати інший метод ($t) з додатковим пераметром для того щоб плюралізація працювала. Якщо розробник не використав спеціальний метод, перекладач не зможе додати плюралізований варіант перекладу.
 -->
 
 ---
@@ -103,6 +105,8 @@ shared-photos =
 Fluent це система локалізації, розроблена Mozilla. Версія 1.0 була випущена в 2019 році. Використовується в багатьох проектах Mozilla, таких як Firefox, Thunderbird та інших.
 
 Вона використовує простий синтаксис, але дозволяє описувати складний синтаксис мови. Він дозволяє використовувати множину, відмінки, роди, і т.д.
+
+Більшість цого підтримується додаванням підтримки
 -->
 
 ---
@@ -117,7 +121,7 @@ layout: two-cols-header
 
 ::right::
 
-```ftl
+```ftl {all|2|5-13|6,9|6-8|9-12|all|8}
 # Simple things are simple.
 hello-user = Hello, {$userName}!
 
@@ -134,16 +138,56 @@ shared-photos =
 ```
 
 <!--
+Давайте поближче ознайомимось з Fluent синтаксисом.
+
 На цьому прикладі показані дві локалізовані стрічки.
 
 Перша стрічка проста, і вона не відрізняється від того як це було б в інших системах локалізації.
-А друга стрічка демонструє як Fluent дозволяє описувати складні речення.
+А друга стрічка демонструє як Fluent дозволяє описувати складні речення. 
 
-Тут ми бачимо що в залежності від значення змінної photoCount, ми можемо робити різні переклади. Якщо photoCount буде 1, то буде використана перша підстрічка, а якщо більше 1, то друга. А змінна userGender визначає який рід буде використаний в перекладі.
+Тут використовується `select` синтакс, в мовах програмування його еквівалентом буде `switch` чи `if/else`. Ми бачимо що в залежності від значення змінної `photoCount`, використовуються різні переклади. Якщо `photoCount` буде 1, то буде використана перша підстрічка, а якщо більше 1, то друга. А змінна `userGender` визначає який рід буде використаний в перекладі.
 
-Це ефективно дозволяє об'єднати 6 варіантів речення в одну стрічку локалізації.
+Це ефективно дозволяє об'єднати 6 варіантів речення в одну стрічку локалізації. І це дозволяє розробникам не думати про те як буде виглядати переклад, а просто описувати речення, які потрібно перекласти.
 
-І це дозволяє розробникам не думати про те як буде виглядати переклад, а просто описувати речення, які потрібно перекласти.
+Тут показана ще одна функціональність яку легко пропустити. Змінна `photoCount` тут теж буде локалізована. І в перекладачів навіть є можливіть впливати на те як вона буде локалізована.
+
+Давайте поговоримо більше за локалізацію чисел та дат в Fluent.
+-->
+
+---
+
+## Date, time and number formatting
+
+Fluent will automatically select the right formatter for the argument and format it into a given locale.
+
+This is done using build-in functions: `NUMBER` and `DATETIME`. Both of them use `Intl` browser feature to format numbers and dates.
+
+
+```ftl
+emails = You have { $unreadEmails } unread emails.
+emails2 = You have { NUMBER($unreadEmails) } unread emails.
+```
+
+Fluent enables localizers to have limited control over selected subset of arguments to formatters. This means that, for example, the developer decides what currency the passed number is in, but the localizer can override the defaults on whether the currency should be displayed as a symbol or currency code.
+
+```ftl
+amount-owed = You owe { NUMBER($amount, currencyDisplay: "code", useGrouping: "false") }
+```
+
+```ts
+$t('amount-owed', { amount: Fluent.NumberArgument(50.35, { currency: "USD" }) }) // You owe USD 50.35
+```
+
+In addition Fluent functions are extendable. You can easily add other functions, for example if you want to format dates using `date-fns` or other date formatting library.
+
+<!--
+Fluent автоматично форматує змінні які є числами та датами використовучи вбудовані в браузер `Intl.NumberFormat` та `Intl.DateTimeFormat`. Під капотом форматування перетворюється в виклик відповідних функцій `NUMBER` та `DATETIME`.
+
+В наведному тут прикладі, ці дві стрічки є еквівалентними.
+
+На відміну від інших систем локалізації які дозволяють контролювати форматування лише розробникам або лише перекладачам, в Fluent це можуть робити обоє. Наприклад розробник може передати валюту якою була зроблена покупка, а перекладач може передати параметри які впливають на відображення.
+
+Список функцій Fluent можна розширити, наприклад зробити форматування дат використовуючи бібліотеку, яка вже використовується на проекті, чи додати функцію яка повертає поточну операційну систему щоб локалізувати шорткати.
 -->
 
 ---
@@ -173,7 +217,7 @@ Date, time, and number formatting. Plural categories. Bidirectionality support. 
 Translations are isolated; locale-specific logic doesn't leak to other locales. Authors can iteratively improve translations without impact on other languages.
 
 <!--
-Давайте
+Давайте поговоримо 
 -->
 
 ---
@@ -227,31 +271,6 @@ tabs-close-warning = {$tabCount ->
 
 ---
 
-## Date, time and number formatting
-
-Fluent will automatically select the right formatter for the argument and format it into a given locale.
-
-```ftl
-emails = You have { $unreadEmails } unread emails.
-emails2 = You have { NUMBER($unreadEmails) } unread emails.
-```
-
-But Fluent enables localizers to have limited control over selected subset of arguments to formatters. This means that, for example, the developer decides what currency the passed number is in, but the localizer can override the defaults on whether the currency should be displayed as a symbol or currency code.
-
-```ftl
-amount-owed = You owe { NUMBER($amount, currencyDisplay: "code", useGrouping: "false") }
-```
-
-```ts
-$t('amount-owed', { amount: Fluent.NumberArgument(50.35, { currency: "USD" }) } // You owe USD 50.35
-```
-
-This is done using build-in functions: `NUMBER` and `DATETIME`. Both of them use `Intl` browser feature to format numbers and dates.
-
-In addition Fluent functions are extendable. You can easily add other functions, for example if you want to format dates using `date-fns` or other date formatting library.
-
----
-
 ## Comparison with ICU MessageFormat
 
 ICU MessageFormat is the closest localization system to Fluent in terms of functionality.
@@ -281,3 +300,8 @@ Additionally, Fluent allows translators to override formatting arguments when ap
 ## Pontoon
 
 <img src="/pontoon.png" class="p-4 mx-auto" />
+ />
+>
+>
+ />
+>
