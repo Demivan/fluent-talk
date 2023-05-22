@@ -9,9 +9,9 @@ title: Fluent
 ## localization system for natural-sounding translations
 
 <!--
-Сьогодні я вам хочу розказати про систему для локалізації яку ми використовуємо в нас на проекті, її переваги та недоліки. Мова піде про Fluent.
+Сьогодні я вам хочу розказати про систему для локалізації яку ми використовуємо на проекті, її переваги та недоліки. Мова піде про Fluent.
 
-Але давайте спочатку зробимо крок назад і поговоримо про локалізацію загалом. Що це таке, чому це потрібно, які існують проблеми з існуючими системами локалізації.
+Але давайте спочатку поговоримо про локалізацію загалом. Що це таке, чому це потрібно, які існують проблеми з існуючими системами локалізації.
 
 Хто може сказати що таке локалізація? Чим вона відрізняється від інтернаціоналізації?
 -->
@@ -48,43 +48,38 @@ Internationalization involves making the product or service flexible enough to a
 
 Software localization has been dominated by an outdated paradigm: the translation is just a dictionary of strings which map one-to-one to the English copy.
 
-```json
-{
-  "hello-user": "Hello, {{userName}}!",
-  "shared-photos": "{{userName}} added {{photoCount}} new photos to his stream."  
-}
-```
+This paradigm is unfair and limiting to languages with grammars more complex than English. For any grammatical feature not supported by English, a special case must be added to the source code, leaking logic into all translations. For example a lot of localization systems do not suppost pluralization that depends on multiple variables, forcing developers to split localization into multiple messages.
 
-This paradigm is unfair and limiting to languages with grammars more complex than English. For any grammatical feature not supported by English, a special case must be added to the source code, leaking logic into all translations. Furthermore, creating good UIs which depend on multiple external arguments is hard and requires the developer to understand the grammar of the languages the product targets.
+`vue-i18n` example:
 
 ```json
 {
-  "key_one": "{{count}} item",
-  "key_other": "{{count}} items"
+    "apples-and-bananas": "{appleCountText} and {bananaCountText}",
+    "apples": "{appleCount} apple | {appleCount} apples",
+    "bananas": "{bananaCount} banana | {bananaCount} bananas"
 }
 ```
 
 ```ts
-// The variable name must be count. And it must be present.
-i18next.t('key', {count: 1}); // -> "1 item"
-i18next.t('key', {count: 100}); // -> "100 items"
+$t("apples-and-bananas", {
+  appleCountText: $tc("apples", 1, { appleCount: 1 }),
+  bananaCountText: $tc("banana", 5, { bananaCount: 5 }),
+});
 ```
 
 <!--
 Багато систем локалізації роблять інтернаціоналізацію складнішо. Вони ігнорують складність граматики більшості мов, і просто перекладають слова та речення з англійської мови. Це призводить до того, що розробникам доводиться додавати додатковий код для кожної мови, що використовується в проекті.
 
 Наприклад більшість систем локалізаці не підтримуть плюралізацію декількох змінних. І це призводить до того, що потрібно розбивати переклад на декілька стрічок і потім їх комбінувати.
-
-Або як в цьому прикладі засобу локалізації i18next, для підтримки плюралізації розробник повинен використовувати змінну з іменем count, і вона є обов'язковою. Якщо розробник не передбачив що ця стрічка має бути плюрализована, то перекладач не зможе цього зробити.
 -->
 
 ---
 
 ## What is Fluent?
 
-* Fluent is a localization system designed for creating natural-sounding translations.
-* Developed by Mozilla, the system uses a simpler syntax than traditional localization systems.
-* It allows, when necessary, to express complex concepts from natural languages like gender, plurals, conjugations, and others.
+- Fluent is a localization system designed for creating natural-sounding translations.
+- Developed by Mozilla, the system uses a simpler syntax than traditional localization systems.
+- It allows, when necessary, to express complex concepts from natural languages like gender, plurals, conjugations, and others.
 
 ```ftl
 # Simple things are simple.
@@ -171,7 +166,7 @@ Natural-sounding translations with genders and grammatical cases only when neces
 
 ### Fully-Featured
 
-Date, time, and number formatting. Plural categories. Bidirectionality support. Custom formatters. Easy-to-read syntax. Runtime translation and re-translation. Robust error handling.
+Date, time, and number formatting. Plural categories. Bidirectionality support. Custom formatters. Easy-to-read syntax. Robust error handling.
 
 ### Progressive Enhancement
 
@@ -190,12 +185,13 @@ layout: two-cols-header
 Each language is isolated and the localization logic of one language doesn't leak into other languages nor into the source code.
 
 ```js
-$t('tabs-close-tooltip', { tabCount: 5 })
+$t("tabs-close-warning", { tabCount: 5 });
 ```
 
 ::left::
 
 ### English:
+
 ```ftl
 tabs-close-button = Close
 tabs-close-tooltip = {$tabCount ->
@@ -210,6 +206,7 @@ tabs-close-warning =
 ::right::
 
 ### Ukrainian:
+
 ```ftl
 tabs-close-button = Закрити
 tabs-close-tooltip = {$tabCount ->
@@ -232,7 +229,26 @@ tabs-close-warning = {$tabCount ->
 
 ## Date, time and number formatting
 
+Fluent will automatically select the right formatter for the argument and format it into a given locale.
 
+```ftl
+emails = You have { $unreadEmails } unread emails.
+emails2 = You have { NUMBER($unreadEmails) } unread emails.
+```
+
+But Fluent enables localizers to have limited control over selected subset of arguments to formatters. This means that, for example, the developer decides what currency the passed number is in, but the localizer can override the defaults on whether the currency should be displayed as a symbol or currency code.
+
+```ftl
+amount-owed = You owe { NUMBER($amount, currencyDisplay: "code", useGrouping: "false") }
+```
+
+```ts
+$t('amount-owed', { amount: Fluent.NumberArgument(50.35, { currency: "USD" }) } // You owe USD 50.35
+```
+
+This is done using build-in functions: `NUMBER` and `DATETIME`. Both of them use `Intl` browser feature to format numbers and dates.
+
+In addition Fluent functions are extendable. You can easily add other functions, for example if you want to format dates using `date-fns` or other date formatting library.
 
 ---
 
@@ -256,7 +272,7 @@ shared-photos = {userName} {photoCount, plural,
 
 Features that Fluent adds compared to MessageFormat: comments, BiDi support, message refences.
 
-Fluent has formatters that work out of the box, or you can extend them easily. MessageFormat provides formatters that must be applied by the developer. 
+Fluent has formatters that work out of the box, or you can extend them easily. MessageFormat provides formatters that must be applied by the developer.
 
 Additionally, Fluent allows translators to override formatting arguments when appropriate (e.g. translator can decide to show currency symbol or code).
 
@@ -264,4 +280,4 @@ Additionally, Fluent allows translators to override formatting arguments when ap
 
 ## Pontoon
 
-<img src="/pontoon.png" class="h-full p-4 m-auto rounded shadow" />
+<img src="/pontoon.png" class="p-4 mx-auto" />
