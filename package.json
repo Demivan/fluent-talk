@@ -8,8 +8,8 @@
   },
   "dependencies": {
     "@fluent/bundle": "^0.18.0",
-    "@slidev/cli": "^0.40.16",
-    "@slidev/client": "^0.40.16",
+    "@slidev/cli": "^0.41.1",
+    "@slidev/client": "^0.41.1",
     "@slidev/theme-default": "*",
     "@slidev/theme-seriph": "*",
     "fluent-vue": "^3.3.0",
