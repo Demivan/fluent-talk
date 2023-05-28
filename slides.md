@@ -39,7 +39,7 @@ Internationalization involves making the product or service flexible enough to a
 
 Інтернаціоналізація - це процес проєктування та розробки продукту або сервісу, який легко локалізується.
 
-Дуже часто розробники ігнорують інтернаціоналізацію, або роблять її пізно, коли вже відбулася локалізація. І це призводить до того, що локалізація стає дуже складною, або навіть неможливою.
+Дуже часто розробники ігнорують інтернаціоналізацію, або роблять її пізно, коли вже розпочалась локалізація. І це призводить до того, що локалізація стає дуже складною.
 -->
 
 ---
@@ -68,11 +68,11 @@ $t("apples-and-bananas", {
 ```
 
 <!--
-Та й багато систем локалізації роблять інтернаціоналізацію складнішою. Вони ігнорують складність граматики більшості мов, і просто перекладають слова та речення з англійської мови. Це призводить до того, що розробникам доводиться додавати додатковий код для кожної мови, що використовується в проєкті.
+Та й багато систем локалізації роблять інтернаціоналізацію складнішою. Вони ігнорують складність граматики більшості мов, і просто перекладають слова та речення з англійської (базової) мови. Це призводить до того, що розробникам доводиться додавати додатковий код для кожної мови, що використовується в проєкті.
 
-Наприклад більшість систем локалізації не підтримують плюралізацію декількох змінних, що призводить до того, що потрібно розбивати переклад на декілька стрічок і потім їх комбінувати.
+Наприклад більшість систем локалізації не підтримують переклади які залежать він множини декількох змінних, що призводить до того, що потрібно розбивати переклад на декілька стрічок і потім їх комбінувати.
 
-Тут наведений приклад з `vue-i18n`. Як бачимо, синтаксис заставляє розбивати просте речення на три переклади. Додатково розробнику необхідно використовувати інший метод ($t) з додатковим параметром для того, щоб плюралізація працювала. Якщо розробник не використав спеціальний метод, перекладач не зможе додати плюралізований варіант перекладу.
+Тут наведений приклад з `vue-i18n`. Як бачимо, синтаксис заставляє розбивати просте речення на три переклади. Додатково розробнику необхідно використовувати інший метод ($tc) з додатковим параметром для того, щоб працювала локалізація множини. Якщо розробник не використав спеціальний метод, перекладач не зможе додати варіант перекладу з множиною.
 -->
 
 ---
@@ -100,13 +100,11 @@ shared-photos =
 ```
 
 <!--
-Що ж таке Fluent і як він вирішує проблеми з локацізацією та інтернаціоналізацією?
+Що ж таке Fluent і як він розв'язує проблеми з локалізацією та інтернаціоналізацією?
 
-Fluent це система локалізації, розроблена Mozilla. Версія 1.0 була випущена в 2019 році. Використовується в багатьох проектах Mozilla, таких як Firefox, Thunderbird та інших.
+Fluent це система локалізації, розроблена Mozilla. Версія 1.0 була випущена у 2019 році. Вона використовується в багатьох проєктах Mozilla, таких як Firefox, Thunderbird та інших.
 
 Вона використовує простий синтаксис, але дозволяє описувати складний синтаксис мови. Він дозволяє використовувати множину, відмінки, роди, і т.д.
-
-Більшість цого підтримується додаванням підтримки
 -->
 
 ---
@@ -147,7 +145,7 @@ shared-photos =
 
 Тут використовується `select` синтаксис, в мовах програмування його еквівалентом буде `switch` чи `if/else`. Ми бачимо що в залежності від значення змінної `photoCount`, використовуються різні переклади. Якщо `photoCount` буде 1, то буде використана перша під-стрічка, а якщо більше ніж 1, то друга. А змінна `userGender` визначає який рід буде використаний в перекладі.
 
-Це ефективно дозволяє об'єднати 6 варіантів речення в одну стрічку локалізації. І це дозволяє розробникам не думати про те як буде виглядати переклад, а просто описувати речення, які потрібно перекласти.
+Це ефективно об'єднує 6 варіантів речення в одну стрічку локалізації. І дозволяє розробникам не думати про те як буде виглядати переклад, а просто описувати речення, які потрібно перекласти.
 
 Тут показана ще одна функціональність яку легко пропустити. Змінна `photoCount` тут теж буде локалізована. І в перекладачів навіть є можливість впливати на те як вона буде локалізована.
 
@@ -181,43 +179,13 @@ $t('amount-owed', { amount: Fluent.NumberArgument(50.35, { currency: "USD" }) })
 In addition Fluent functions are extendable. You can easily add other functions, for example if you want to format dates using `date-fns` or other date formatting library.
 
 <!--
-Fluent автоматично форматує змінні які є числами та датами використовуючи вбудовані в браузер `Intl.NumberFormat` та `Intl.DateTimeFormat`. Під капотом форматування перетворюється в виклик відповідних функцій `NUMBER` та `DATETIME`.
+Fluent автоматично форматує змінні які є числами та датами використовуючи вбудовані в браузер API `Intl.NumberFormat` та `Intl.DateTimeFormat`. Під капотом форматування перетворюється в виклик відповідних функцій `NUMBER` та `DATETIME`.
 
 В наведеному тут прикладі, ці дві стрічки є еквівалентними.
 
 На відміну від інших систем локалізації які дозволяють контролювати форматування лише розробникам або лише перекладачам, у Fluent це можуть робити обоє. Наприклад розробник може передати валюту якою була зроблена покупка, а перекладач може передати параметри які впливають на відображення.
 
-Список функцій Fluent можна розширити, наприклад зробити форматування дат використовуючи бібліотеку, яка вже використовується на проєкті, чи додати функцію яка повертає поточну операційну систему, щоб локалізувати шорткати.
--->
-
----
-layout: two-cols-header
----
-
-## Fluent features
-
-::left::
-
-### Easy to Learn
-
-Fluent is a small, expressive, and unambiguous language. It is simple enough to be learned quickly, but powerful enough to express complex UI translations.
-
-### Asymmetric Localization
-
-Natural-sounding translations with genders and grammatical cases only when necessary. Expressiveness is not limited by the grammar of the source language.
-
-::right::
-
-### Fully-Featured
-
-Date, time, and number formatting. Plural categories. Bidirectionality support. Custom formatters. Easy-to-read syntax. Robust error handling.
-
-### Progressive Enhancement
-
-Translations are isolated; locale-specific logic doesn't leak to other locales. Authors can iteratively improve translations without impact on other languages.
-
-<!--
-Давайте поговоримо 
+Список функцій Fluent можна розширити, наприклад зробити форматування дат використовуючи бібліотеку, яка вже використовується на проєкті, чи додати функцію яка вертає поточну операційну систему, щоб локалізувати шорткати.
 -->
 
 ---
@@ -269,6 +237,50 @@ tabs-close-warning = {$tabCount ->
 }
 ```
 
+<!--
+Ще одною перевагою Fluent є те що зміни перекладів в одній мові не приводять до змін в коді проєкту чи перекладах інших мов.
+
+Тут на прикладі `tabs-close-warning` в англійській мові не має додатково варіанту множини. І додавання цієї логіки в український варіант перекладу не потребує змін в коді - єдиним параметром залишається змінна `$tabCount`.
+
+В `tabs-close-tooltip` в українському перекладі є варіант п
+-->
+
+---
+layout: two-cols-header
+---
+
+## Fluent features
+
+::left::
+
+### Easy to Learn
+
+Fluent is a small, expressive, and unambiguous language. It is simple enough to be learned quickly, but powerful enough to express complex UI translations.
+
+### Asymmetric Localization
+
+Natural-sounding translations with genders and grammatical cases only when necessary. Expressiveness is not limited by the grammar of the source language.
+
+::right::
+
+### Fully-Featured
+
+Date, time, and number formatting. Plural categories. Bidirectionality support. Custom formatters. Easy-to-read syntax. Robust error handling.
+
+### Progressive Enhancement
+
+Translations are isolated; locale-specific logic doesn't leak to other locales. Authors can iteratively improve translations without impact on other languages.
+
+<!--
+Підсу
+-->
+
+---
+
+## Pontoon
+
+<img src="/pontoon.png" class="p-4 mx-auto" />
+
 ---
 
 ## Comparison with ICU MessageFormat
@@ -297,11 +309,46 @@ Additionally, Fluent allows translators to override formatting arguments when ap
 
 ---
 
-## Pontoon
+## Downsides of Fluent
 
-<img src="/pontoon.png" class="p-4 mx-auto" />
- />
->
->
- />
->
+- Learning Curve  
+  Unique syntax and concepts may require additional time for developers and translators to learn.
+
+- Limited Tooling  
+  Fewer available integrated development environments (IDEs) and localization-specific tools.
+
+- Adoption and Support  
+  Relatively new system with limited resources, documentation, and community support.
+
+- Integration Challenges  
+  Difficulty integrating Fluent into existing codebases or platforms using different localization systems.
+
+<!--
+Хоча Fluent має багато переваг, він також має деякі недоліки.
+
+Синтаксис та концепції Fluent можуть потребувати додаткового часу для опановування як розробниками, так і перекладачами.
+
+Також Fluent є порівняно новою та менш популярною системою, тому він має обмежену кількість інструментів та документації.
+-->
+
+---
+
+## Implementations
+
+### Official
+
+- The JavaScript implementation at [`fluent.js`](https://github.com/projectfluent/fluent.js), including the [React bindings](https://github.com/projectfluent/fluent.js/tree/master/fluent-react).
+- The Python implementation at [`python-fluent`](https://github.com/projectfluent/python-fluent).
+- The Rust implementation at [`fluent-rs`](https://github.com/projectfluent/fluent-rs).
+
+### Community
+
+- [`fluent-vue`](https://github.com/demivan/fluent-vue) - Vue.js plugin - integration for `fluent.js`
+- [`Fluent.Net`](https://github.com/blushingpenguin/Fluent.Net) - .NET implementation
+- [`fluent.go`](https://github.com/lus/fluent.go) - a Golang implementation
+- [`elm-fluent`](https://github.com/elm-fluent/elm-fluent) - an Elm implementation
+- [`fluent-dart`](https://github.com/ryanhz/fluent-dart) as a Dart runtime implementation
+
+<!--
+Хоча Fluent порівняно менш популярний ніж деякі інші системи локалізації, він має декілька реалізацій на різних мовах програмування, включаючи JavaScript, Python, Rust, Go, Dart, Elm, .NET, та інші.
+-->
