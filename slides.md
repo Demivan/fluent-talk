@@ -15,22 +15,22 @@ transition: fade-out
 <!--
 Привіт всім. Мене звуть Іван. Я техлід на проєкті Scor.
 
-Сьогодні я хочу вам розказати про систему для локалізації яку ми використовуємо на проєкті, її переваги та недоліки. Мова піде про Fluent.
+І сьогодні я хочу вам розказати про систему для локалізації яку ми використовуємо на проєкті, її переваги та недоліки. Мова піде про Fluent.
 
-Але давайте спочатку поговоримо про локалізацію загалом. Що це таке, чому це потрібно, які існують проблеми з наявними системами локалізації.
+Але давайте спочатку поговоримо про локалізацію загалом. Що це таке, чому це потрібно, які існують проблеми з існуючими системами локалізації.
 
 Хто може сказати що таке локалізація? Чим вона відрізняється від інтернаціоналізації?
 -->
 
 ---
 
-## What is the difference between localization and internationalization?
+## Localization vs internationalization
 
 ### What is Localization? (l10n)
 
 Localization is the process of adapting a product or service to meet the language, cultural, and other specific requirements of a particular country or region.
 
-Localization includes translation of content, but also includes adjustments to date and time formats, currency, images, and other factors that impact how the product or service is perceived and used.
+Localization includes translation of content, but also includes adjustments to date and time formats, currency, images, and other.
 
 ### What is Internationalization? (i18n)
 
@@ -39,9 +39,9 @@ Internationalization is the process of designing and developing a product or ser
 Internationalization involves making the product or service flexible enough to accommodate local differences in content, without requiring significant changes to the core product or service.
 
 <!--
-Локалізація - це процес адаптації продукту або сервісу для відповідності мовним, культурним та іншим специфічним вимогам певної країни або регіону.
+Локалізація - це процес адаптації продукту відповідно мовним, культурним та іншим вимогам певної країни або регіону.
 
-Це означає не тільки переклад контенту, але й адаптацію формату дати та часу, валюти, зображень та іншого, що впливає на сприйняття та використання продукту або сервісу.
+Це означає не тільки переклад контенту, але й адаптацію форматів дати та часу, валюти, зображень та іншого.
 
 Інтернаціоналізація ж, це процес проєктування та розробки продукту або сервісу, який легко локалізується.
 
@@ -54,23 +54,23 @@ Internationalization involves making the product or service flexible enough to a
 
 Software localization has been dominated by an outdated paradigm: the translation is just a dictionary of strings which map one-to-one to the English copy.
 
-This paradigm is unfair and limiting to languages with grammars more complex than English. For any grammatical feature not supported by English, a special case must be added to the source code, leaking logic into all translations. For example, a lot of localization systems do not support pluralization that depends on multiple variables, forcing developers to split localization into multiple messages.
+This paradigm is unfair and limiting to languages with grammars more complex than English. For any grammatical feature not supported by English, a special case must be added to the source code, leaking logic into all translations.
 
-`vue-i18n` example:
+For example, a lot of localization systems do not support pluralization that depends on multiple variables, forcing developers to split localization into multiple messages (`vue-i18n`):
 
 ```json
 {
     "apples-and-bananas": "{appleCountText} and {bananaCountText}",
-    "apples": "{appleCount} apple | {appleCount} apples",
-    "bananas": "{bananaCount} banana | {bananaCount} bananas"
+    "apples": "{appleCount} apple|{appleCount} apples",
+    "bananas": "{bananaCount} banana|{bananaCount} bananas"
 }
 ```
 
 ```ts
 $t("apples-and-bananas", {
-  appleCountText: $tc("apples", 1, { appleCount: 1 }),
-  bananaCountText: $tc("banana", 5, { bananaCount: 5 }),
-});
+  appleCountText: $tc("apples", 1, { appleCount: 1 }), // "1 apple"
+  bananaCountText: $tc("bananas", 5, { bananaCount: 5 }), // "5 bananas"
+}); // "1 apple and 5 bananas"
 ```
 
 <!--
@@ -78,7 +78,9 @@ $t("apples-and-bananas", {
 
 Також простий синтаксис більшості систем локалізації не підтримує переклади які залежать він множини декількох змінних, що змушує розробників розбивати переклад на декілька стрічок і потім їх комбінувати.
 
-Тут наведений приклад з `vue-i18n`. Як бачимо, синтаксис змушує розбивати просте речення на три переклади. Додатково з цією системою розробнику необхідно використовувати інший метод (`$tc`) з додатковим параметром для того, щоб працювала локалізація множини. Якщо розробник не використав спеціальний метод, перекладач не зможе додати варіант перекладу з множиною.
+Тут наведений приклад з `vue-i18n`. Як бачимо, просте речення тут розбито на три стрічки перекладу. Вони не зв'язані між собою, що ускладнює роботу перекладачам. Та це потребує додаткового коду від розробника, щоб зібрати речення з декількох перекладів.
+
+ Додатково з цією системою локалізації розробнику необхідно використовувати інший метод (`$tc`) з додатковим параметром для того, щоб працювала локалізація множини. Якщо розробник не використав спеціальний метод, перекладач не зможе додати варіант перекладу з множиною.
 
 І таких прикладів є дуже багато в різних системах локалізації.
 -->
@@ -363,14 +365,13 @@ Pontoon також має багато іншої корисної функці�
 
 ## Future of Fluent
 
-ICU MessageFormat is the closest localization system to Fluent in terms of functionality.
-But ICU is a C and Java library - it's not designed for the web. On the other hand, Fluent is a web-first localization system, but it is much less popular than ICU.
+`ICU MessageFormat` is the closest localization system to Fluent in terms of functionality.
 
-Currently, the team behind Fluent is working with Unicode team on a new version of MessageFormat (2) that extends MessageFormat 1 with features from Fluent.
+Currently, the team behind Fluent is working with Unicode team on a new version of `MessageFormat 2` that extends MessageFormat 1 with features from Fluent.
 
-In addition to new, improved syntax, there is a proposal to introduce new web APIs for MessageFormat 2 support - `Intl.MessageFormat`. So we might get a browser-native localization system that is as powerful as Fluent in the future.
+In addition to new, improved syntax, there is a proposal to introduce new web APIs for `MessageFormat 2` support - `Intl.MessageFormat`. So we might get a browser-native localization system that is as powerful as Fluent in the future.
 
-Cool thing is that Fluent is already compatible with MessageFormat 2. So if MessageFormat 2 is adopted by browsers, Fluent syntax can be easily converted to MessageFormat 2 syntax.
+Cool thing is that Fluent is already compatible with MessageFormat 2 and can be easily converted to MessageFormat 2 syntax.
 
 So with Fluent, you get a powerful localization system today that is easily compatible with the future of Web i18n.
 
