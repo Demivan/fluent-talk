@@ -69,6 +69,11 @@
     border-bottom: 1px solid var(--lt-color-border-dark);
   }
   
+  option {
+    color: var(--lt-color-text-default);
+    background: var(--lt-color-background-default);
+  }
+  
   input:focus {
     outline: none;
   }
