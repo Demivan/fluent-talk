@@ -388,9 +388,9 @@ ICU MessageFormat є однією з найбільш популярних си�
 -->
 
 ---
-layout: center
+layout: fact
 ---
 
 ## Thank you!
 
-### Any questions?
+Any questions?
